@@ -15,28 +15,26 @@ class BigDream
 
 
   def find_friend(location)
+    friend = false
     @friends.each do |f|
       if f.location == location.reference
-        return f
+        friend = f
       else
-        return false
+        next
       end
     end
+    return friend
   end
 
   def show_current_description
-    puts "show current description is running find_dream"
-    puts @person.location
     puts find_dream(@person.location).full_description
   end
 
   def find_dream(reference)
-    puts @subdreams.detect { |dream| dream.reference == reference}
     @subdreams.detect { |dream| dream.reference == reference}
   end
 
   def find_connected_dream(feeling)
-    puts @person.location
     find_dream(@person.location).connections[feeling.to_sym]
   end
 
@@ -120,9 +118,9 @@ class Run
     if input == "yes"
       results = {:friendly => "Wow, what a nice conversation. You've made a new friend!",
                  :mean => "\"Mine! It's all mine! MINE!!!\"\nWow, someone never learned about sharing.",
-                 :cruel => "The octocat looks at you with distain.\nYou must learn more git to earn its respect."}
+                 :cruel => "The octocat will not speak to you.\nIt looks at you with distain.\nYou must learn more git to earn its respect."}
       puts results[friend.attitude]
-    elsif ["exit", "i want to wake up!", "wake up!", "end"].include?(input)
+    elsif ["exit", "i want to wake up!", "wake up!", "end", "quit"].include?(input)
       quit
     end
   end
@@ -140,7 +138,7 @@ class Run
     input = ''
     until (options.include?(input) || ["exit", "i want to wake up!", "wake up!", "end"].include?(input))
       input = gets.chomp.downcase.to_sym
-      if ["exit", "i want to wake up!", "wake up!", "end"].include?(input.to_s)
+      if ["exit", "i want to wake up!", "wake up!", "end", "quit"].include?(input.to_s)
         quit
       elsif !(options.include?(input))
         puts "This isn't lucid dreaming, buddy.\nYou're not in charge.\nPick a feeling."
