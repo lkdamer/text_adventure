@@ -15,14 +15,13 @@ class BigDream
 
 
   def find_friend(location)
-    friend = false
     @friends.each do |f|
-      if f.location == location
-        friend = f
+      if f.location == location.reference
         return f
+      else
+        return false
       end
     end
-    return friend
   end
 
   def show_current_description
@@ -94,7 +93,6 @@ class Run
     @dream.person.location = location
     until ["exit", "i want to wake up!", "wake up!", "end"].include?(input)
       location = @dream.find_dream(@dream.person.location)
-      puts location
       @dream.show_current_description
       input = doing_stuff(location)
       input = feelings(location)
@@ -105,7 +103,6 @@ class Run
     puts "Let's look around."
     friend = @dream.find_friend(location)
     if friend
-      print friend.class, friend
       chit_chat(friend)
     end
     puts "Look at that!\n#{location.interactivity}\nWant to check it out?"
@@ -124,7 +121,7 @@ class Run
       results = {:friendly => "Wow, what a nice conversation. You've made a new friend!",
                  :mean => "\"Mine! It's all mine! MINE!!!\"\nWow, someone never learned about sharing.",
                  :cruel => "The octocat looks at you with distain.\nYou must learn more git to earn its respect."}
-      puts results[friend.tude]
+      puts results[friend.attitude]
     elsif ["exit", "i want to wake up!", "wake up!", "end"].include?(input)
       quit
     end
@@ -145,7 +142,7 @@ class Run
       input = gets.chomp.downcase.to_sym
       if ["exit", "i want to wake up!", "wake up!", "end"].include?(input.to_s)
         quit
-      else
+      elsif !(options.include?(input))
         puts "This isn't lucid dreaming, buddy.\nYou're not in charge.\nPick a feeling."
       end
     end
@@ -157,12 +154,12 @@ end
 
 subdreams = [[:cloud, "The Clouds", "floating among the clouds.\nHow nice.", {curious: :falling, hungry: :jello}, "That cloud looks like a duck!", "QUACK QUACK!\nHow unexpected!"],
              [:jello, "Jello Room", "in a room made of jello! Exciting!\nAlso, sticky.", {relaxed: :suburbs, adventurous: :ship}, "Yellow jello!\nYellow.\nJello.\nJust kidding, the jello is orange.\nI just like rhymes.", "BOING! PBBLLTHHHPPFFTTT!\nIt's jello, not a trampoline. What did you expect?"],
-             [:falling, "Falling", "in the sky, falling through the air, feeling no fear! WHEEE!", {light: :clouds, despairing: :pit, adventurous: :ship}, "Clouds! Air! Clouds! Wheee! Look, a bird!", "\"QUACK!\" Must be a duck! Wheeee!"],
+             [:falling, "Falling", "in the sky, falling through the air, feeling no fear! WHEEE!", {light: :cloud, despairing: :pit, adventurous: :ship}, "Clouds! Air! Clouds! Wheee! Look, a bird!", "\"QUACK!\" Must be a duck! Wheeee!"],
              [:suburbs, "Phoenix Suburbs", "walking around a Phoenix suburb.\nBeyonce and Jay-Z are going to perform at the blcok party tonight!", {tranquil: :halloween, nostalgic: :school}, "A cactus! How green!", "OW! Spikey!\nThat was unwise."],
-             [:halloween, "Halloween Night", "walking around a cozy neighborhood on Halloween evening.", {nostalgic: :school, despairing: :pit}, "What a lovely house!\nI wonder if they have any candy left!", "Too old. They said you were too old.\nOuch."],
+             [:halloween, "Halloween Night", "walking around a cozy neighborhood on Halloween evening.", {nostalgic: :school, despairing: :pit}, "What a lovely house!\nI wonder if they have any candy left!", "Too old. They said you were too old for candy.\nOuch."],
              [:school, "High School", "at a graduation party! There are lemon bars!", {curious: :falling, adventurous: :ship}, "What wonderful looking lemon bars! Yummy yummy!", "Omnomnomnom!"],
              [:ship, "Pirate Ship", "on the deck of a pirate ship! Arrr!", {light: :cloud, despairing: :pit}, "Sails! A mast! A deck!\nOh right, we're on a ship.\nHey, look at that bottle!", "Yohoho and a bottle of rummmm!"],
-             [:pit, "DESPAIR", "YOU DIDN'T USE GIT RIGHT.\nNOW YOUR WORK IS GONE.\nTHERE IS ONLY EMPTINESS.", {hungry: :jello}, "NOTHING. THERE IS NOTHING HERE.", "IT'S GONE. GONE FOREVER. SHADAE SAID SO."]]
+             [:pit, "DESPAIR", "in a dark place.\nYOU DIDN'T USE GIT RIGHT.\nNOW YOUR WORK IS GONE.\nTHERE IS ONLY EMPTINESS.", {hungry: :jello}, "NOTHING. THERE IS NOTHING HERE.", "IT'S GONE. GONE FOREVER. SHADAE SAID SO."]]
 
 friends = [["a kangaroo", :jello, "She's floppy-eared and friendly!", :friendly],
            ["Kanye West", :suburbs, "He's casually dressed, biking around on a little bmx bike.", :mean],
